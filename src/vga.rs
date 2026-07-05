@@ -1,24 +1,22 @@
 #![no_std]
 #![no_main]
 
-mod vga;
-
 ///---Constants---///
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 
 ///---Structures-And-Enums---///
 pub struct Writer {
-    columnPos: usize,
-    colorCode: ColorCode,
+    column_pos: usize,
+    color_code: ColorCode,
     buffer: &'static mut Buffer,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 pub struct ScreenChar {
-    asciiCharacter: u8,
-    colorCode: ColorCode,
+    ascii_char: u8,
+    color_code: ColorCode,
 }
 
 #[repr(transparent)]
@@ -60,34 +58,34 @@ impl ColorCode {
 }
 
 impl Writer {
-    pub fn writeByte(&mut self, byte: u8) {
+    pub fn write_byte(&mut self, byte: u8) {
         match byte {
-            b'\n' => self.newLine(),
+            b'\n' => self.new_line(),
             byte => {
-                if self.columnPos >= BUFFER_WIDTH {
-                    self.newLine();
+                if self.column_pos >= BUFFER_WIDTH {
+                    self.new_line();
                 }
 
                 let row = BUFFER_HEIGHT - 1;
-                let col = self.columnPos;
+                let col = self.column_pos;
 
-                let colorCode = self.colorCode;
+                let color_code = self.color_code;
                 self.buffer.chars[row][col] = ScreenChar {
-                    asciiCharacter: byte,
-                    colorCode,
+                    ascii_char: byte,
+                    color_code,
                 };
-                self.columnPos += 1;
+                self.column_pos += 1;
             }
         }
     }
 
-    fn newLine(&mut self) {/* TODO */}
+    fn new_line(&mut self) {/* TODO */}
 
     pub fn kprint(&mut self, s: &str) {
         for byte in s.bytes() {
             match byte {
-                0x20..=0x7e | b'\n' => self.writeByte(byte),
-                _ => self.writeByte(0xfe),
+                0x20..=0x7e | b'\n' => self.write_byte(byte),
+                _ => self.write_byte(0xfe),
             }
         }
     }
