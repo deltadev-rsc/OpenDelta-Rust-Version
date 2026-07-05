@@ -1,0 +1,19 @@
+[package]
+name = "op-rust"
+version = "0.1.0"
+edition = "2024"
+authors = [ "deltadev-rsc (deltaqxq) deltaqxq174@mail.ru" ]
+
+[[bin]]
+name = "op-rust"
+test = false
+bench = false
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
+[dependencies]
+bootloader = "0.10.4"
