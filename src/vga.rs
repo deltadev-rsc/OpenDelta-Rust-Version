@@ -81,7 +81,7 @@ impl Writer {
 
     fn new_line(&mut self) {/* TODO */}
 
-    pub fn kprint(&mut self, s: &str) {
+    pub fn write_string(&mut self, s: &str) {
         for byte in s.bytes() {
             match byte {
                 0x20..=0x7e | b'\n' => self.write_byte(byte),
@@ -89,4 +89,20 @@ impl Writer {
             }
         }
     }
+}
+
+pub fn print_something() {
+    let mut writer = Writer {
+        column_pos: 0,
+        color_code: ColorCode::new(Color::Cyan, Color::Black),
+        buffer: unsafe {
+            &mut *(0xb8000 as *mut Buffer)
+        },
+    };
+
+    writer.write_byte(b'W');
+    writer.write_string("elcome ");
+    writer.write_string("to ");
+    writer.write_string("the ");
+    writer.write_string("OpenDelta!");
 }
